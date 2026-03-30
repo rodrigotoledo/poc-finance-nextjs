@@ -1,0 +1,143 @@
+{
+  "entity": {
+    "originator": {
+      "label": "Originador"
+    },
+    "receivable": {
+      "label": "Recebível",
+      "status": {
+        "pending": "Pendente",
+        "eligible": "Elegível",
+        "advanced": "Antecipado",
+        "cancelled": "Cancelado"
+      }
+    },
+    "creditOperation": {
+      "label": "Operação de crédito",
+      "status": {
+        "draft": "Rascunho",
+        "approved": "Aprovado",
+        "settled": "Liquidado",
+        "cancelled": "Cancelado"
+      }
+    },
+    "regulatoryGap": {
+      "label": "Gap regulatório",
+      "status": {
+        "open": "Aberto",
+        "resolved": "Resolvido",
+        "ignored": "Ignorado",
+        "dismissed": "Dispensado"
+      },
+      "severity": {
+        "low": "Baixo",
+        "medium": "Médio",
+        "high": "Alto",
+        "critical": "Crítico"
+      }
+    },
+    "import": {
+      "label": "Importação",
+      "status": {
+        "pending": "Pendente",
+        "processing": "Processando",
+        "completed": "Concluído",
+        "failed": "Falhou"
+      }
+    }
+  },
+  "ui": {
+    "importForm": {
+      "open": "+ Nova Importação",
+      "close": "✕ Fechar",
+      "file": "Arquivo (CSV / XLSX)",
+      "originator": "Originador (opcional)",
+      "submit": "Importar",
+      "submitting": "Enviando…",
+      "cancel": "Cancelar"
+    },
+    "common": {
+      "all": "Todos",
+      "search": "Buscar",
+      "searchPlaceholder": "Digite para buscar…",
+      "status": "Status",
+      "previous": "Anterior",
+      "next": "Seguinte",
+      "loading": "Carregando..."
+    },
+    "table": {
+      "pager": {
+        "total": "Total",
+        "page": "Página",
+        "of": "de"
+      }
+    },
+    "dashboard": {
+      "header": {
+        "title": "Dashboard",
+        "description": "Acompanhe os números e eventos mais recentes."
+      },
+      "imports": {
+        "failedTitle": "Importações com erro",
+        "failedBody": "{count} lote(s) falharam.",
+        "failedCta": "Ver importações"
+      },
+      "receivablesByStatus": "Recebíveis por status",
+      "creditOpsByStatus": "Operações de crédito por status",
+      "avgRate": "Taxa média",
+      "feed": {
+        "title": "Feed em tempo real",
+        "connected": "conectado",
+        "waiting": "aguardando...",
+        "empty": "Aguardando eventos do sistema...",
+        "countSuffix": "evento(s)",
+        "entity": {
+          "originators": "Originador",
+          "receivables": "Recebível",
+          "credit_operations": "Op. crédito",
+          "regulatory_gaps": "Gap regulatório"
+        },
+        "action": {
+          "created": "criado",
+          "updated": "atualizado",
+          "discarded": "removido",
+          "changed": "alterado"
+        },
+        "summary": {
+          "status": "status",
+          "rate": "taxa",
+          "dueOn": "venc"
+        }
+      }
+    },
+    "exports": {
+      "entity": {
+        "originators": "Originadores",
+        "receivables": "Recebíveis",
+        "credit_operations": "Operações de crédito",
+        "regulatory_gaps": "Gaps regulatórios",
+        "imports": "Importações",
+        "events": "Eventos (feed)"
+      },
+      "range": {
+        "today": "hoje",
+        "yesterday": "ontem",
+        "week": "últimos 7 dias",
+        "month": "últimos 30 dias"
+      },
+      "alert": {
+        "requested": "Exportação solicitada",
+        "ready": "Exportação pronta (CSV enviado por e-mail)",
+        "failed": "Falha ao gerar exportação",
+        "rows": "linhas"
+      },
+      "action": {
+        "label": "Exportar CSV",
+        "help": "Selecione o período e gere o CSV em background",
+        "button": "CSV",
+        "loading": "Gerando..."
+      }
+    }
+  }
+}
+
