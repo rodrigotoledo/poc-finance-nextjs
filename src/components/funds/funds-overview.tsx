@@ -1,24 +1,25 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
-import { fetchJson } from '@/lib/api/fetch-json';
-import { API_V1 } from '@/lib/types/rails-entities';
-import type { FundsDashboard } from '@/lib/types/investment-domain';
-import { formatBrlFromCents } from '@/lib/format';
+import { formatBrlFromCentsHuman } from '@/lib/format';
 import { StatCard } from '@/components/crud/stat-card';
 import { FundsStatusChart } from '@/components/funds/funds-status-chart';
 import { useTUI } from '@/i18n/client';
 import { investmentRiskRiskType, t } from '@/lib/i18n/status';
+import { useFundsDashboardStream } from '@/hooks/use-funds-dashboard-stream';
 
 export function FundsOverview() {
   const tu = useTUI();
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['funds', 'dashboard'],
-    queryFn: () => fetchJson<FundsDashboard>(`${API_V1}/funds/dashboard`),
-    staleTime: 15_000,
-  });
+  const { data, loading, error } = useFundsDashboardStream();
 
-  if (isLoading || !data) {
+  if (error) {
+    return (
+      <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200">
+        {tu('funds.overview.errorPrefix')} {error.message}
+      </div>
+    );
+  }
+
+  if (loading || !data) {
     return (
       <div className="mb-6 rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950">
         {tu('funds.overview.loading')}
@@ -26,16 +27,16 @@ export function FundsOverview() {
     );
   }
 
-  if (isError) {
-    return (
-      <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200">
-        {tu('funds.overview.errorPrefix')} {error instanceof Error ? error.message : String(error)}
-      </div>
-    );
-  }
-
   const dashboard = data;
   const risks = dashboard.risks_for_funds;
+
+  const commitment = formatBrlFromCentsHuman(dashboard.totals.total_commitment_cents);
+  const allocated = formatBrlFromCentsHuman(dashboard.totals.total_allocated_cents);
+  const available = formatBrlFromCentsHuman(dashboard.totals.total_available_cents);
+  const volume = formatBrlFromCentsHuman(dashboard.investments_via_funds.total_amount_cents);
+
+  const statMoney = (c: { display: string; title: string }) =>
+    c.title && c.display !== c.title ? { value: c.display, valueTitle: c.title } : { value: c.display };
 
   return (
     <div className="mb-6 space-y-6">
@@ -43,18 +44,9 @@ export function FundsOverview() {
         <h2 className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">{tu('funds.overview.sectionLedger')}</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <StatCard label={tu('funds.overview.statRegisteredFunds')} value={dashboard.funds_count} />
-          <StatCard
-            label={tu('funds.overview.statTotalCommitment')}
-            value={formatBrlFromCents(dashboard.totals.total_commitment_cents)}
-          />
-          <StatCard
-            label={tu('funds.overview.statAllocated')}
-            value={formatBrlFromCents(dashboard.totals.total_allocated_cents)}
-          />
-          <StatCard
-            label={tu('funds.overview.statAvailableSum')}
-            value={formatBrlFromCents(dashboard.totals.total_available_cents)}
-          />
+          <StatCard label={tu('funds.overview.statTotalCommitment')} {...statMoney(commitment)} />
+          <StatCard label={tu('funds.overview.statAllocated')} {...statMoney(allocated)} />
+          <StatCard label={tu('funds.overview.statAvailableSum')} {...statMoney(available)} />
         </div>
       </section>
 
@@ -64,10 +56,7 @@ export function FundsOverview() {
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <StatCard label={tu('funds.overview.statPositionsCount')} value={dashboard.investments_via_funds.count} />
-          <StatCard
-            label={tu('funds.overview.statVolume')}
-            value={formatBrlFromCents(dashboard.investments_via_funds.total_amount_cents)}
-          />
+          <StatCard label={tu('funds.overview.statVolume')} {...statMoney(volume)} />
         </div>
       </section>
 

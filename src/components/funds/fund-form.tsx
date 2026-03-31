@@ -57,7 +57,6 @@ export function FundForm() {
       try {
         await postJson(`${API_V1}/funds`, { fund: fundPayload });
         await queryClient.invalidateQueries({ queryKey: ['funds'] });
-        await queryClient.invalidateQueries({ queryKey: ['funds', 'dashboard'] });
         form.reset();
         setFormOpen(false);
       } catch (error) {

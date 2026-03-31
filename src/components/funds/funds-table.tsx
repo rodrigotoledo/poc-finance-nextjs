@@ -7,8 +7,8 @@ import { fetchPaginated } from '@/lib/api/fetch-json';
 import { API_V1 } from '@/lib/types/rails-entities';
 import type { Fund } from '@/lib/types/investment-domain';
 import type { PaginatedResponse } from '@/lib/types/pagination';
-import { formatBrlFromCents } from '@/lib/format';
 import { formatDate } from '@/lib/format';
+import { FormattedBrlCents } from '@/components/ui/formatted-brl-cents';
 import { DataTable } from '@/components/ui/data-table';
 import { TableFilters, useTableFilters } from '@/components/ui/table-filters';
 import { tUI } from '@/lib/i18n/ui';
@@ -37,16 +37,11 @@ export function FundsTable({ initialPage }: { initialPage: PaginatedResponse<Fun
       }),
       col.accessor('allocated_amount_cents', {
         header: tUI('funds.table.columns.allocated'),
-        cell: (i) => <span className="tabular-nums">{formatBrlFromCents(i.getValue())}</span>,
+        cell: (i) => <FormattedBrlCents cents={i.getValue()} emptyLabel={tUI('common.emDash')} />,
       }),
       col.accessor('available_amount_cents', {
         header: tUI('funds.table.columns.available'),
-        cell: (i) => {
-          const v = i.getValue();
-          return (
-            <span className="tabular-nums">{v != null ? formatBrlFromCents(v) : tUI('common.emDash')}</span>
-          );
-        },
+        cell: (i) => <FormattedBrlCents cents={i.getValue()} emptyLabel={tUI('common.emDash')} />,
       }),
       col.accessor('created_at', {
         header: tUI('funds.table.columns.createdAt'),

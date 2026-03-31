@@ -1,8 +1,8 @@
-# credito-poc-web (Next.js)
+# poc-finance-rails (Next.js)
 
 Console em **Next.js 15** + **Tailwind** que consome o BFF Nest em `/api/v1/*` (proxy para Rails).
 
-- Tipos: `src/lib/types/rails-entities.ts` (manter alinhado com `credito-poc-nestjs/src/domain/rails-entities.ts`).
+- Tipos: `src/lib/types/rails-entities.ts` (manter alinhado com `poc-finance-nestjs/src/domain/rails-entities.ts`).
 - Variáveis: [`.env.example`](.env.example).
 
 ## Regra: não use `npm` no host
