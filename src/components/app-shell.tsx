@@ -58,6 +58,16 @@ function IconBuilding() {
   );
 }
 
+function IconFunds() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 shrink-0">
+      <rect x="3" y="12" width="4" height="9" rx="1"/>
+      <rect x="10" y="6" width="4" height="15" rx="1"/>
+      <rect x="17" y="9" width="4" height="12" rx="1"/>
+    </svg>
+  );
+}
+
 function IconReceipt() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 shrink-0">
@@ -115,6 +125,7 @@ const nav = [
   { href: "/",                  label: "Início",               icon: <IconHome /> },
   { href: "/dashboard",         label: "Dashboard",            icon: <IconDashboard /> },
   { href: "/originators",       label: "Originadores",         icon: <IconBuilding /> },
+  { href: "/funds",             label: "Fundos",               icon: <IconFunds /> },
   { href: "/receivables",       label: "Recebíveis",           icon: <IconReceipt /> },
   { href: "/credit-operations", label: "Operações de crédito", icon: <IconCreditCard /> },
   { href: "/regulatory-gaps",   label: "Gaps regulatórios",    icon: <IconShield /> },

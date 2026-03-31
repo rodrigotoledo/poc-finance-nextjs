@@ -10,6 +10,9 @@ export function formatCnpj(value: string): string {
 }
 
 export function formatBrlFromCents(cents: number): string {
+  if (!Number.isFinite(cents)) {
+    return "—";
+  }
   return new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency: "BRL",

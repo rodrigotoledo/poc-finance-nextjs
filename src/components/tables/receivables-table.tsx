@@ -1,19 +1,19 @@
 'use client';
 
-import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import { DataTable } from '@/components/ui/data-table';
+import { ExportCsvControl } from '@/components/ui/export-csv';
+import { TableFilters, useTableFilters } from '@/components/ui/table-filters';
+import { useServerEvents } from '@/hooks/use-server-events';
+import { fetchPaginated } from '@/lib/api/fetch-json';
+import { formatDate } from '@/lib/format';
+import { t } from '@/lib/i18n/status';
+import { tUI } from '@/lib/i18n/ui';
+import type { PaginatedResponse } from '@/lib/types/pagination';
+import { API_V1, type Receivable } from '@/lib/types/rails-entities';
+import { statusBadgeClass } from '@/lib/ui/status-badges';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { createColumnHelper, type PaginationState } from '@tanstack/react-table';
 import { useState } from 'react';
-import { fetchPaginated } from '@/lib/api/fetch-json';
-import { API_V1, type Receivable } from '@/lib/types/rails-entities';
-import type { PaginatedResponse } from '@/lib/types/pagination';
-import { formatDate } from '@/lib/format';
-import { statusBadgeClass } from '@/lib/ui/status-badges';
-import { t } from '@/lib/i18n/status';
-import { useServerEvents } from '@/hooks/use-server-events';
-import { DataTable } from '@/components/ui/data-table';
-import { TableFilters, useTableFilters } from '@/components/ui/table-filters';
-import { tUI } from '@/lib/i18n/ui';
-import { ExportCsvControl } from '@/components/ui/export-csv';
 
 function formatBRL(cents: number) {
   return (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -49,10 +49,10 @@ const columns = [
   }),
 ];
 
-export function ReceivablesTable({ initialPage }: { initialPage: PaginatedResponse<Receivable> }) {
+export function ReceivablesTable({ initialPage, initialFilters }: { initialPage: PaginatedResponse<Receivable>, initialFilters?: { q?: string, status?: string } }) {
   useServerEvents(['receivables']);
 
-  const filters = useTableFilters();
+  const filters = useTableFilters(initialFilters);
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: initialPage.meta.page - 1,

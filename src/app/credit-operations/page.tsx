@@ -1,12 +1,13 @@
-import { PageHeader } from "@/components/page-header";
 import { DataError } from "@/components/data-error";
+import { CreditOperationForm } from "@/components/forms/credit-operation-form";
+import { PageHeader } from "@/components/page-header";
+import { CreditOperationsTable } from "@/components/tables/credit-operations-table";
 import { fetchPaginated } from "@/lib/api/fetch-json";
-import type { CreditOperation } from "@/lib/types/rails-entities";
-import { API_V1 } from "@/lib/types/rails-entities";
+import { tUI } from "@/lib/i18n/ui";
 import type { PaginatedResponse } from "@/lib/types/pagination";
 import { DEFAULT_PAGE_SIZE } from "@/lib/types/pagination";
-import { CreditOperationsTable } from "@/components/tables/credit-operations-table";
-import { CreditOperationForm } from "@/components/forms/credit-operation-form";
+import type { CreditOperation } from "@/lib/types/rails-entities";
+import { API_V1 } from "@/lib/types/rails-entities";
 
 export default async function CreditOperationsPage() {
   let initialPage: PaginatedResponse<CreditOperation> | null = null;
@@ -23,7 +24,7 @@ export default async function CreditOperationsPage() {
   if (error || !initialPage) {
     return (
       <>
-        <PageHeader title="Operações de crédito" />
+        <PageHeader title={tUI('creditOperations.page.title')} />
         <DataError message={error ?? "Resposta inválida"} />
       </>
     );
@@ -32,8 +33,8 @@ export default async function CreditOperationsPage() {
   return (
     <div>
       <PageHeader
-        title="Operações de crédito"
-        description="Inclui recebível e originador quando a API devolve includes."
+        title={tUI('creditOperations.page.title')}
+        description={tUI('creditOperations.page.description')}
       />
       <CreditOperationForm />
       <CreditOperationsTable initialPage={initialPage} />

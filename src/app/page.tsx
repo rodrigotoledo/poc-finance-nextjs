@@ -1,11 +1,12 @@
-import Link from "next/link";
 import { PageHeader } from "@/components/page-header";
+import { tUI } from "@/lib/i18n/ui";
+import Link from "next/link";
 
 const sections = [
   {
     href: "/dashboard",
     title: "Dashboard",
-    text: "Estatísticas consolidadas e feed em tempo real do pregão via Redis.",
+    text: tUI('home.sections.dashboard'),
     highlight: true,
   },
   {
@@ -16,7 +17,7 @@ const sections = [
   {
     href: "/receivables",
     title: "Recebíveis",
-    text: "Títulos com valor em centavos, vencimento e status.",
+    text: tUI('home.sections.receivables'),
   },
   {
     href: "/credit-operations",
@@ -31,7 +32,7 @@ const sections = [
   {
     href: "/imports",
     title: "Importações",
-    text: "Lotes CSV/XLSX processados em background.",
+    text: tUI('home.sections.imports'),
   },
 ];
 
@@ -39,8 +40,8 @@ export default function HomePage() {
   return (
     <div>
       <PageHeader
-        title="Console"
-        description="Painel de controlo — Rails API v2 (OpenAPI 3.1)."
+        title={tUI('home.page.title')}
+        description={tUI('home.page.description')}
       />
       <ul className="grid gap-4 sm:grid-cols-2">
         {sections.map((s) => (

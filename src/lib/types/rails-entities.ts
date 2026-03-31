@@ -85,9 +85,17 @@ export const API_V2 = "/api/v2" as const;
 export interface DashboardStats {
   originators: { total: number };
   receivables: { total: number; total_amount_cents: number; by_status: Record<string, number> };
-  credit_operations: { total: number; total_funded_cents: number; avg_rate: string; by_status: Record<string, number> };
+  credit_operations: {
+    total: number;
+    total_funded_cents: number;
+    /** Taxa média como número (API pode enviar string por serialização Ruby). */
+    avg_rate: number | null;
+    by_status: Record<string, number>;
+  };
   regulatory_gaps: { total: number; open: number };
   imports: { total: number; pending: number; processing: number; completed: number; failed: number };
+  /** Agregados de fundos (Rails → Nest `/dashboard`); atualizados em tempo real via Redis + WS. */
+  funds: { total: number; by_status: Record<string, number> };
 }
 
 export interface RailsEvent {
@@ -102,3 +110,4 @@ export interface RailsEvent {
   meta?: Record<string, unknown>;
   time: string;
 }
+

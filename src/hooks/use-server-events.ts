@@ -5,9 +5,10 @@ import { useEffect } from 'react';
 import { io } from 'socket.io-client';
 
 /**
- * Connects to NestJS WebSocket (socket.io) and invalidates TanStack Query
- * caches whenever Rails publishes a change for one of the given entity keys.
- * Used by every CRUD table page.
+ * Tempo real: Rails `Publishable` → `RedisPublisher` (pub/sub + stream) → Nest `EventsService`
+ * (consumer group) → `EventsGateway` (socket.io `entity_event`) → aqui invalidamos React Query.
+ *
+ * Use nas páginas de CRUD / visão geral cujos dados devem atualizar quando o domínio mudar no Rails.
  */
 export function useServerEvents(entities: string[]) {
   const queryClient = useQueryClient();
@@ -19,8 +20,9 @@ export function useServerEvents(entities: string[]) {
     socket.on('entity_event', (event: { entity: string }) => {
       if (entities.includes(event.entity)) {
         void queryClient.invalidateQueries({ queryKey: [event.entity] });
-        // Also refresh the dashboard aggregate when any entity changes
+        // Dashboard usa duas chaves (StatsCards vs useDashboardStats) — manter alinhado.
         void queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+        void queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
       }
     });
 

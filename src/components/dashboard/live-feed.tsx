@@ -1,21 +1,22 @@
 'use client';
 
+import { ExportCsvControl } from '@/components/ui/export-csv';
+import { buildNestQuery, fetchNestJson } from '@/lib/api/fetch-nest';
+import { t } from '@/lib/i18n/status';
+import { tUI } from '@/lib/i18n/ui';
 import type { RailsEvent } from '@/lib/types/rails-entities';
+import { getStatusTailwindClass } from '@/lib/ui/status-colors';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
-import { buildNestQuery, fetchNestJson } from '@/lib/api/fetch-nest';
-import { tUI } from '@/lib/i18n/ui';
-import { t } from '@/lib/i18n/status';
-import { ExportCsvControl } from '@/components/ui/export-csv';
 
 const FEED_LIMIT = 50;
 
 const ACTION_COLORS: Record<string, string> = {
-  created:   'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
+  created:   getStatusTailwindClass('approved'),  // Same green as approved status
   updated:   'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
-  discarded: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
-  changed:   'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300',
+  discarded: getStatusTailwindClass('cancelled'), // Same red as cancelled status
+  changed:   getStatusTailwindClass('draft'),     // Same gray as draft status
 };
 
 function formatBRL(cents: number) {
@@ -30,6 +31,9 @@ function eventSummary(ev: RailsEvent): string {
   if (meta.amount_cents)        parts.push(formatBRL(Number(meta.amount_cents)));
   if (meta.rate)                parts.push(`${tUI('dashboard.feed.summary.rate')}: ${meta.rate}%`);
   if (meta.due_on)              parts.push(`${tUI('dashboard.feed.summary.dueOn')}: ${meta.due_on}`);
+  if (meta.name && typeof meta.name === 'string') parts.push(meta.name);
+  if (meta.allocated_amount_cents != null)
+    parts.push(formatBRL(Number(meta.allocated_amount_cents)));
   return parts.join(' · ');
 }
 
@@ -73,7 +77,8 @@ export function LiveFeed() {
       if (ev.entity === 'imports' || ev.entity === 'exports') return;
       setEvents((prev) => [{ ...ev, _key: ++keyRef.current }, ...prev].slice(0, FEED_LIMIT));
       // Invalidate dashboard stats to refetch
-      queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
+      void queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+      void queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
     });
 
     return () => {

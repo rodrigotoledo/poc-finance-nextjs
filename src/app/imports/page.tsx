@@ -1,12 +1,13 @@
-import { PageHeader } from "@/components/page-header";
 import { DataError } from "@/components/data-error";
+import { ImportForm } from "@/components/forms/import-form";
+import { PageHeader } from "@/components/page-header";
+import { ImportsTable } from "@/components/tables/imports-table";
 import { fetchPaginated } from "@/lib/api/fetch-json";
-import type { ImportBatch } from "@/lib/types/rails-entities";
-import { API_V1 } from "@/lib/types/rails-entities";
+import { tUI } from "@/lib/i18n/ui";
 import type { PaginatedResponse } from "@/lib/types/pagination";
 import { DEFAULT_PAGE_SIZE } from "@/lib/types/pagination";
-import { ImportsTable } from "@/components/tables/imports-table";
-import { ImportForm } from "@/components/forms/import-form";
+import type { ImportBatch } from "@/lib/types/rails-entities";
+import { API_V1 } from "@/lib/types/rails-entities";
 
 export default async function ImportsPage() {
   let initialPage: PaginatedResponse<ImportBatch> | null = null;
@@ -23,7 +24,7 @@ export default async function ImportsPage() {
   if (error || !initialPage) {
     return (
       <>
-        <PageHeader title="Importações" />
+        <PageHeader title={tUI('imports.page.title')} />
         <DataError message={error ?? "Resposta inválida"} />
       </>
     );
@@ -32,8 +33,8 @@ export default async function ImportsPage() {
   return (
     <div>
       <PageHeader
-        title="Importações"
-        description="Lotes ordenados por data (mais recentes primeiro). Envio multipart continua na API."
+        title={tUI('imports.page.title')}
+        description={tUI('imports.page.description')}
       />
       <ImportForm />
       <ImportsTable initialPage={initialPage} />

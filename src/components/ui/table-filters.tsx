@@ -14,13 +14,13 @@ export function useTableFilters(initial?: Partial<TableFilterState>) {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Draft values — controlled by the inputs, not yet sent to the API.
-  const [q, setQ] = useState(searchParams.get('q') ?? initial?.q ?? '');
-  const [status, setStatus] = useState(searchParams.get('status') ?? initial?.status ?? '');
+  // Applied values come directly from the URL — always in sync.
+  const qApplied = searchParams.get('q') ?? initial?.q ?? '';
+  const statusApplied = searchParams.get('status') ?? initial?.status ?? '';
 
-  // Applied values — reflect what is actually being queried (from URL).
-  const [qApplied, setQApplied] = useState(searchParams.get('q') ?? initial?.q ?? '');
-  const [statusApplied, setStatusApplied] = useState(searchParams.get('status') ?? initial?.status ?? '');
+  // Draft values are local state for the inputs (not yet committed to URL).
+  const [q, setQ] = useState(qApplied);
+  const [status, setStatus] = useState(statusApplied);
 
   const hasFilters = qApplied !== '' || statusApplied !== '';
 
@@ -30,8 +30,6 @@ export function useTableFilters(initial?: Partial<TableFilterState>) {
     if (status) params.set('status', status);
     const qs = params.toString();
     router.push(pathname + (qs ? `?${qs}` : ''), { scroll: false });
-    setQApplied(q);
-    setStatusApplied(status);
   }, [q, status, router, pathname]);
 
   return useMemo(

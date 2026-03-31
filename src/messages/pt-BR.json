@@ -44,6 +44,24 @@
         "completed": "Concluído",
         "failed": "Falhou"
       }
+    },
+    "fund": {
+      "label": "Fundo",
+      "status": {
+        "active": "Ativo",
+        "closed": "Encerrado",
+        "winding_up": "Em liquidação"
+      }
+    },
+    "investmentRisk": {
+      "riskType": {
+        "credit": "Crédito",
+        "market": "Mercado",
+        "liquidity": "Liquidez",
+        "operational": "Operacional",
+        "legal": "Legal",
+        "other": "Outro"
+      }
     }
   },
   "ui": {
@@ -63,7 +81,22 @@
       "status": "Status",
       "previous": "Anterior",
       "next": "Seguinte",
-      "loading": "Carregando..."
+      "loading": "Carregando...",
+      "required": "Obrigatório",
+      "optional": "Opcional",
+      "emDash": "—",
+      "invalidResponse": "Resposta inválida",
+      "save": "Salvar",
+      "saving": "Salvando…",
+      "cancel": "Cancelar",
+      "quantity": "Quantidade"
+    },
+    "crud": {
+      "tabs": {
+        "overview": "Visão geral",
+        "list": "Lista",
+        "create": "Novo"
+      }
     },
     "table": {
       "pager": {
@@ -73,9 +106,43 @@
       }
     },
     "dashboard": {
+      "loadingStats": "Carregando estatísticas…",
+      "errorLoad": "Erro ao carregar dashboard",
       "header": {
         "title": "Dashboard",
         "description": "Acompanhe os números e eventos mais recentes."
+      },
+      "cards": {
+        "originators": "Originadores",
+        "receivables": "Recebíveis",
+        "receivablesInPortfolio": "em carteira",
+        "creditOperations": "Op. de Crédito",
+        "creditOperationsFinanced": "financiados",
+        "regulatoryGaps": "Gaps Regulatórios",
+        "gapsOpen": "{count} abertos",
+        "funds": "Fundos",
+        "fundsRegisteredApi": "Total cadastrados"
+      },
+      "summary": {
+        "title": "Resumo geral",
+        "activeOriginators": "Originadores ativos",
+        "regulatoryGaps": "Gaps regulatórios",
+        "avgRate": "Taxa média"
+      },
+      "importsProgress": {
+        "title": "Importações em andamento:",
+        "line": "{processing} processando · {pending} aguardando · {completed} concluídas · {failed} falharam"
+      },
+      "amountsChart": {
+        "title": "Valores totais",
+        "subtitle": "Carteira atual",
+        "categoryReceivables": "Recebíveis",
+        "categoryCredit": "Crédito",
+        "tooltipValue": "Valor"
+      },
+      "creditOpsChart": {
+        "title": "Operações de crédito por status",
+        "subtitle": "{count} operações · taxa média {avgRate}"
       },
       "imports": {
         "failedTitle": "Importações com erro",
@@ -95,7 +162,11 @@
           "originators": "Originador",
           "receivables": "Recebível",
           "credit_operations": "Op. crédito",
-          "regulatory_gaps": "Gap regulatório"
+          "regulatory_gaps": "Gap regulatório",
+          "funds": "Fundo",
+          "investors": "Investidor",
+          "investment_risks": "Risco de investimento",
+          "investments": "Investimento"
         },
         "action": {
           "created": "criado",
@@ -136,6 +207,109 @@
         "help": "Selecione o período e gere o CSV em background",
         "button": "CSV",
         "loading": "Gerando..."
+      }
+    },
+    "funds": {
+      "page": {
+        "title": "Fundos",
+        "description": "Gerencie seus fundos de investimento e acompanhe o desempenho."
+      },
+      "form": {
+        "open": "+ Novo fundo",
+        "close": "✕ Fechar",
+        "title": "Novo fundo",
+        "submit": "Salvar fundo",
+        "saving": "Salvando…",
+        "fields": {
+          "name": "Nome",
+          "fundType": "Tipo (equity, debt, mixed…)",
+          "status": "Status",
+          "targetReturn": "Meta de retorno (% a.a.)",
+          "targetReturnPlaceholder": "Ex.: 12.5",
+          "totalCommitment": "Compromisso total (R$)",
+          "allocated": "Alocado (R$)",
+          "available": "Disponível (R$)"
+        }
+      },
+      "table": {
+        "columns": {
+          "name": "Nome",
+          "type": "Tipo",
+          "status": "Status",
+          "allocated": "Alocado",
+          "available": "Disponível",
+          "createdAt": "Criado"
+        },
+        "empty": "Nenhum fundo.",
+        "searchPlaceholder": "Nome do fundo"
+      },
+      "overview": {
+        "loading": "Carregando visão geral e estatísticas dos fundos…",
+        "errorPrefix": "Não foi possível carregar os dados dos fundos:",
+        "sectionLedger": "Carteira e compromissos (ledger)",
+        "sectionInvestments": "Investimentos com fundo vinculado",
+        "sectionRisks": "Riscos associados aos investimentos",
+        "risksHelp": "Avaliações de risco para todos os investimentos vinculados a este fundo.",
+        "statRegisteredFunds": "Fundos cadastrados",
+        "statTotalCommitment": "Compromisso total",
+        "statAllocated": "Valor alocado",
+        "statAvailableSum": "Disponível (soma)",
+        "statPositionsCount": "Quantidade de posições",
+        "statVolume": "Volume (montante)",
+        "statRiskEvaluations": "Avaliações de risco",
+        "statAvgScore": "Score médio",
+        "statAvgScoreSub": "Avaliação média de risco",
+        "statPendingMitigation": "Mitigação pendente",
+        "statPendingMitigationSub": "Aguardando ação corretiva",
+        "byRiskType": "Por tipo de risco"
+      },
+      "statusChart": {
+        "title": "Fundos por status",
+        "fundCount": "{count} fundo(s)"
+      }
+    },
+    "receivables": {
+      "page": {
+        "title": "Recebíveis",
+        "description": "Gerencie seus recebíveis e acompanhe o status de antecipação."
+      }
+    },
+    "creditOperations": {
+      "page": {
+        "title": "Operações de crédito",
+        "description": "Acompanhe as operações de crédito e seus respectivos recebíveis."
+      }
+    },
+    "originators": {
+      "page": {
+        "title": "Originadores",
+        "description": "Gerencie os originadores de recebíveis no sistema."
+      }
+    },
+    "imports": {
+      "page": {
+        "title": "Importações",
+        "description": "Acompanhe o status das importações de dados realizadas no sistema."
+      }
+    },
+    "regulatoryGaps": {
+      "page": {
+        "title": "Gaps regulatórios",
+        "description": "Gerencie os gaps regulatórios identificados no sistema."
+      }
+    },
+    "home": {
+      "page": {
+        "title": "Console",
+        "description": "Painel de controle financeiro para gestão de recebíveis e operações de crédito."
+      },
+      "sections": {
+        "dashboard": "Estatísticas consolidadas e feed em tempo real das operações.",
+        "originators": "Contrapartes no mercado de recebíveis (CNPJ, razão social).",
+        "receivables": "Títulos com valor, vencimento e status de antecipação.",
+        "creditOperations": "Operações ligadas a recebíveis e originadores.",
+        "regulatoryGaps": "Rastreamento de lacunas de compliance (BACEN, etc.).",
+        "imports": "Lotes de dados processados em background."
       }
     }
   }
