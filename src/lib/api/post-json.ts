@@ -4,7 +4,11 @@ export async function postJson<T>(path: string, body: unknown): Promise<T> {
   const url = `${getApiBaseUrl()}${path}`;
   const res = await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'Idempotency-Key': crypto.randomUUID(),
+    },
     body: JSON.stringify(body),
   });
   if (!res.ok) {

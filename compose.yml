@@ -1,6 +1,5 @@
 # Next.js:
-#   CRUD  -> Rails direto (TanStack Query/Form)
-#   Dashboard/WebSocket -> NestJS (socket.io, non-blocking)
+#   CRUD + dashboard -> Rails direto (TanStack Query/Form + SSE)
 #
 networks:
   backend:
@@ -22,8 +21,6 @@ services:
       NEXT_TELEMETRY_DISABLED: "1"
       NEXT_PUBLIC_RAILS_URL: http://localhost:3000
       RAILS_INTERNAL_URL: http://app:3000
-      NEXT_PUBLIC_NEST_URL: http://localhost:4000
-      NEST_INTERNAL_URL: http://nest:4000
     env_file:
       - path: .env.local
         required: false
@@ -34,8 +31,6 @@ services:
       - backend
     depends_on:
       app:
-        condition: service_started
-      nest:
         condition: service_started
 
 volumes:

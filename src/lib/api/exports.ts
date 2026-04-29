@@ -21,6 +21,7 @@ export async function requestExportCsv(opts: {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'Idempotency-Key': crypto.randomUUID(),
     },
     body: JSON.stringify({
       entity: opts.entity,

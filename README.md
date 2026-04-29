@@ -1,8 +1,8 @@
 # poc-finance-rails (Next.js)
 
-Console em **Next.js 15** + **Tailwind** que consome o BFF Nest em `/api/v1/*` (proxy para Rails).
+Console em **Next.js 15** + **Tailwind** que consome a API **Rails** diretamente.
 
-- Tipos: `src/lib/types/rails-entities.ts` (manter alinhado com `poc-finance-nestjs/src/domain/rails-entities.ts`).
+- Tipos: `src/lib/types/rails-entities.ts` (espelha o JSON do Rails).
 - Variáveis: [`.env.example`](.env.example).
 
 ## Regra: não use `npm` no host
@@ -10,10 +10,18 @@ Console em **Next.js 15** + **Tailwind** que consome o BFF Nest em `/api/v1/*` (
 Instalação de dependências e `npm run dev` / `build` devem correr **dentro do Docker** (o Compose monta o código e usa o volume `web_node_modules`). Na **raiz do monorepo**:
 
 ```bash
-docker compose up --build   # sobe infra + Rails + Nest + web (Next)
+docker compose up --build   # sobe infra + Rails + web (Next)
 ```
 
-O serviço `web` expõe **http://localhost:3001** (porta do host → 3000 no contentor). Copie [`.env.example`](.env.example) para `.env.local` se precisar de overrides (opcional).
+O serviço `web` expõe **`http://localhost:3001`** (porta do host → 3000 no contentor). Copie [`.env.example`](.env.example) para `.env.local` se precisar de overrides (opcional).
+
+## Subir só este projeto (standalone)
+
+Se você quiser subir **Next + Rails + infra** a partir desta pasta:
+
+```bash
+docker compose -f compose.standalone.yml up --build
+```
 
 **Equivalentes ao que seria `npm` no host** (a partir da raiz, com stack já definida no [compose.yml](../compose.yml)):
 

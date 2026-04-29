@@ -2,15 +2,14 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { fetchJson } from '@/lib/api/fetch-json';
-import { getEventsSocket } from '@/lib/api/events-socket';
+import { getApiBaseUrl } from '@/lib/api/config';
 import { API_V1 } from '@/lib/types/rails-entities';
 import type { FundsDashboard } from '@/lib/types/investment-domain';
 
 const DASHBOARD_ENTITIES = new Set(['funds', 'investments', 'investment_risks']);
 
 /**
- * Agregados da página de fundos: carrega de Rails e atualiza quando o Nest emite
- * `entity_event` (origem: Redis stream `poc:events:stream`, não invalidação TanStack).
+ * Agregados da página de fundos: carrega de Rails e atualiza via SSE (`/api/v2/events`).
  */
 export function useFundsDashboardStream() {
   const [data, setData] = useState<FundsDashboard | null>(null);
@@ -34,15 +33,22 @@ export function useFundsDashboardStream() {
   }, [load]);
 
   useEffect(() => {
-    const s = getEventsSocket();
-    const handler = (event: { entity: string }) => {
-      if (DASHBOARD_ENTITIES.has(event.entity)) {
-        void load();
+    const url = `${getApiBaseUrl()}/api/v2/events`;
+    const source = new EventSource(url);
+
+    source.onmessage = (msg) => {
+      try {
+        const ev = JSON.parse(msg.data) as { entity?: string };
+        if (ev.entity && DASHBOARD_ENTITIES.has(ev.entity)) {
+          void load();
+        }
+      } catch {
+        // Ignore malformed events.
       }
     };
-    s.on('entity_event', handler);
+
     return () => {
-      s.off('entity_event', handler);
+      source.close();
     };
   }, [load]);
 

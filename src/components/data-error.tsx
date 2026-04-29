@@ -7,13 +7,13 @@ export function DataError({ message }: { message: string }) {
       <p className="font-medium">Não foi possível carregar os dados</p>
       <p className="mt-1 font-mono text-xs opacity-90">{message}</p>
       <p className="mt-2 text-xs opacity-80">
-        Confirme que o Nest (BFF) e o Rails estão a correr e que{" "}
+        Confirme que o Rails está a correr e que{" "}
         <code className="rounded bg-red-100 px-1 dark:bg-red-900/50">
-          API_INTERNAL_URL
+          RAILS_INTERNAL_URL
         </code>{" "}
         /{" "}
         <code className="rounded bg-red-100 px-1 dark:bg-red-900/50">
-          NEXT_PUBLIC_API_URL
+          NEXT_PUBLIC_RAILS_URL
         </code>{" "}
         estão corretos.
       </p>

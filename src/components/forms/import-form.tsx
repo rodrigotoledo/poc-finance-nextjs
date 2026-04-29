@@ -66,7 +66,10 @@ export function ImportForm() {
 
       const res = await fetch(`${getApiBaseUrl()}${API_V1}/imports`, {
         method: 'POST',
-        headers: { Accept: 'application/json' },
+        headers: { 
+          Accept: 'application/json',
+          'Idempotency-Key': crypto.randomUUID()
+        },
         body: fd,
       });
 

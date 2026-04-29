@@ -4,7 +4,7 @@ import { AmountsChart } from '@/components/dashboard/amounts-chart';
 import { CreditOpsChart } from '@/components/dashboard/credit-ops-chart';
 import { ReceivablesChart } from '@/components/dashboard/receivables-chart';
 import { useServerEvents } from '@/hooks/use-server-events';
-import { fetchNestJson } from '@/lib/api/fetch-nest';
+import { fetchJson } from '@/lib/api/fetch-json';
 import { t } from '@/lib/i18n/status';
 import { tUI } from '@/lib/i18n/ui';
 import { normalizeDashboardStats } from '@/lib/dashboard/normalize-dashboard-stats';
@@ -62,7 +62,7 @@ export function StatsCards({ initialData }: { initialData: DashboardStats }) {
 
   const { data: s = normalizedInitialData } = useQuery({
     queryKey: ['dashboard'],
-    queryFn: async () => normalizeDashboardStats(await fetchNestJson<unknown>(`/dashboard`)),
+    queryFn: async () => normalizeDashboardStats(await fetchJson<unknown>(`/api/v2/dashboard`)),
     initialData: normalizedInitialData,
     refetchInterval: 1_500,
   });

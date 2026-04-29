@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { io } from 'socket.io-client';
 import type { RailsEvent } from '@/lib/types/rails-entities';
 import { tUI } from '@/lib/i18n/ui';
+import { getApiBaseUrl } from '@/lib/api/config';
 
 type AlertItem = {
   key: number;
@@ -53,10 +53,17 @@ export function ExportAlerts() {
 
   useEffect(() => {
     const timersMap = timers.current;
-    const nestUrl = process.env.NEXT_PUBLIC_NEST_URL ?? 'http://localhost:4000';
-    const socket = io(nestUrl, { transports: ['websocket'] });
+    const url = `${getApiBaseUrl()}/api/v2/events`;
+    const source = new EventSource(url);
 
-    socket.on('entity_event', (ev: RailsEvent) => {
+    source.onmessage = (msg) => {
+      let ev: RailsEvent;
+      try {
+        ev = JSON.parse(msg.data) as RailsEvent;
+      } catch {
+        return;
+      }
+
       if (ev.entity !== 'exports') return;
       const meta = (ev.meta ?? {}) as Record<string, unknown>;
       const entity = typeof meta.entity === 'string' ? meta.entity : undefined;
@@ -93,10 +100,10 @@ export function ExportAlerts() {
           message: `${tUI('exports.alert.failed')}${error ? ` · ${error}` : ''}`,
         });
       }
-    });
+    };
 
     return () => {
-      socket.disconnect();
+      source.close();
       for (const t of timersMap.values()) window.clearTimeout(t);
       timersMap.clear();
     };

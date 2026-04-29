@@ -1,14 +1,13 @@
 'use client';
 
 import { ExportCsvControl } from '@/components/ui/export-csv';
-import { buildNestQuery, fetchNestJson } from '@/lib/api/fetch-nest';
+import { getApiBaseUrl } from '@/lib/api/config';
 import { t } from '@/lib/i18n/status';
 import { tUI } from '@/lib/i18n/ui';
 import type { RailsEvent } from '@/lib/types/rails-entities';
 import { getStatusTailwindClass } from '@/lib/ui/status-colors';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
-import { io } from 'socket.io-client';
 
 const FEED_LIMIT = 50;
 
@@ -46,44 +45,32 @@ export function LiveFeed() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    let cancelled = false;
+    const url = `${getApiBaseUrl()}/api/v2/events`;
+    const source = new EventSource(url);
 
-    // Initial load: last 50 events from Redis Stream (newest -> oldest).
-    void (async () => {
+    source.onopen = () => setConnected(true);
+    source.onerror = () => setConnected(false);
+
+    source.onmessage = (msg) => {
+      let ev: RailsEvent;
       try {
-        const r = await fetchNestJson<{
-          items: (RailsEvent & { stream_id: string })[];
-        }>(`/events/recent${buildNestQuery({ limit: FEED_LIMIT })}`);
-
-        if (cancelled) return;
-        setEvents(
-          r.items
-            .filter((ev) => ev.entity !== 'imports' && ev.entity !== 'exports')
-            .map((ev) => ({ ...ev, stream_id: ev.stream_id, _key: ++keyRef.current })),
-        );
+        ev = JSON.parse(msg.data) as RailsEvent;
       } catch {
-        // If history fails, we still show realtime events via WS.
+        return;
       }
-    })();
 
-    const nestUrl = process.env.NEXT_PUBLIC_NEST_URL ?? 'http://localhost:4000';
-    const socket = io(nestUrl, { transports: ['websocket'] });
-
-    socket.on('connect', () => setConnected(true));
-    socket.on('disconnect', () => setConnected(false));
-
-    socket.on('entity_event', (ev: RailsEvent) => {
-      // Importações têm UI própria (/imports) — o feed do dashboard foca no fluxo de operações.
+      // Importações e exports têm UI própria (/imports, exports) — o feed do dashboard foca no fluxo de operações.
       if (ev.entity === 'imports' || ev.entity === 'exports') return;
+
       setEvents((prev) => [{ ...ev, _key: ++keyRef.current }, ...prev].slice(0, FEED_LIMIT));
+
       // Invalidate dashboard stats to refetch
       void queryClient.invalidateQueries({ queryKey: ['dashboard'] });
       void queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
-    });
+    };
 
     return () => {
-      cancelled = true;
-      socket.disconnect();
+      source.close();
     };
   }, [queryClient]);
 
