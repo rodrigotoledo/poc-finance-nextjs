@@ -1,10 +1,10 @@
 import { getRequestConfig } from 'next-intl/server';
-import ptBR from '../src/messages/pt-BR.json';
+import en from '../src/messages/en.json';
 
 export default getRequestConfig(async () => {
   return {
-    locale: 'pt-BR',
-    messages: ptBR,
+    locale: 'en',
+    messages: en,
   };
 });
 

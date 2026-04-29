@@ -1,4 +1,4 @@
-import rawMessages from '@/messages/pt-BR.json';
+import rawMessages from '@/messages/en.json';
 
 type UnknownRecord = Record<string, unknown>;
 

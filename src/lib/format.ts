@@ -13,9 +13,9 @@ export function formatBrlFromCents(cents: number): string {
   if (!Number.isFinite(cents)) {
     return "—";
   }
-  return new Intl.NumberFormat("pt-BR", {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "BRL",
+    currency: "USD",
   }).format(cents / 100);
 }
 
@@ -50,9 +50,9 @@ export function formatBrlFromCentsHuman(cents: number | null | undefined): {
   }
 
   const fmt = (value: number) =>
-    value.toLocaleString("pt-BR", { maximumFractionDigits: 2, minimumFractionDigits: 0 });
+    value.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 });
 
-  const display = `${sign}R$ ${fmt(abs / 1_000_000_000)} bi`;
+  const display = `${sign}$${fmt(abs / 1_000_000_000)}B`;
   return { display, title: full };
 }
 
@@ -61,7 +61,7 @@ const DISPLAY_TZ = "America/Sao_Paulo";
 
 export function formatDate(iso: string): string {
   try {
-    return new Intl.DateTimeFormat("pt-BR", {
+    return new Intl.DateTimeFormat("en-US", {
       dateStyle: "short",
       timeStyle: "short",
       timeZone: DISPLAY_TZ,

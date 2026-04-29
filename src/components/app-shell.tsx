@@ -122,14 +122,14 @@ function IconChevronRight() {
 }
 
 const nav = [
-  { href: "/",                  label: "Início",               icon: <IconHome /> },
+  { href: "/",                  label: "Home",                 icon: <IconHome /> },
   { href: "/dashboard",         label: "Dashboard",            icon: <IconDashboard /> },
-  { href: "/originators",       label: "Originadores",         icon: <IconBuilding /> },
-  { href: "/funds",             label: "Fundos",               icon: <IconFunds /> },
-  { href: "/receivables",       label: "Recebíveis",           icon: <IconReceipt /> },
-  { href: "/credit-operations", label: "Operações de crédito", icon: <IconCreditCard /> },
-  { href: "/regulatory-gaps",   label: "Gaps regulatórios",    icon: <IconShield /> },
-  { href: "/imports",           label: "Importações",          icon: <IconUpload /> },
+  { href: "/originators",       label: "Originators",          icon: <IconBuilding /> },
+  { href: "/funds",             label: "Funds",                icon: <IconFunds /> },
+  { href: "/receivables",       label: "Receivables",          icon: <IconReceipt /> },
+  { href: "/credit-operations", label: "Credit Operations",    icon: <IconCreditCard /> },
+  { href: "/regulatory-gaps",   label: "Regulatory Gaps",      icon: <IconShield /> },
+  { href: "/imports",           label: "Imports",              icon: <IconUpload /> },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -152,7 +152,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <button
           onClick={() => setCollapsed(!collapsed)}
           className="absolute -right-3 top-18 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-500 shadow-sm transition hover:bg-zinc-50 hover:text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
-          title={collapsed ? "Expandir menu" : "Recolher menu"}
+          title={collapsed ? "Expand menu" : "Collapse menu"}
         >
           {collapsed ? <IconChevronRight /> : <IconChevronLeft />}
         </button>

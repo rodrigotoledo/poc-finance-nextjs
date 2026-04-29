@@ -129,7 +129,7 @@ export function CreditOperationForm() {
 
             <form.Field name="funded_amount_brl" validators={{ onChange: ({ value }) => !value || isNaN(parseFloat(value)) ? 'Valor inválido' : undefined }}>
               {(field) => (
-                <Field label="Valor Financiado (R$)" error={field.state.meta.errors[0]?.toString()}>
+                <Field label="Valor Financiado (USD)" error={field.state.meta.errors[0]?.toString()}>
                   <input type="number" step="0.01" min="0.01" className={inputCls} value={field.state.value} onChange={(e) => field.handleChange(e.target.value)} onBlur={field.handleBlur} />
                 </Field>
               )}

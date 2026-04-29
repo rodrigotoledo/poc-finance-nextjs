@@ -16,7 +16,7 @@ import { createColumnHelper, type PaginationState } from '@tanstack/react-table'
 import { useState } from 'react';
 
 function formatBRL(cents: number) {
-  return (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  return (cents / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 }
 
 const col = createColumnHelper<Receivable>();

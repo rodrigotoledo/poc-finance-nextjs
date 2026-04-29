@@ -29,9 +29,9 @@ export function ReceivablesChart({ by_status }: Props) {
   return (
     <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
       <p className="text-xs font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-        Recebíveis por status
+        Receivables by status
       </p>
-      <p className="mt-0.5 text-xs text-zinc-400">{total} recebíveis</p>
+      <p className="mt-0.5 text-xs text-zinc-400">{total} receivables</p>
 
       <ResponsiveContainer width="100%" height={220}>
         <BarChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
@@ -48,7 +48,7 @@ export function ReceivablesChart({ by_status }: Props) {
             tick={{ fontSize: 12 }}
           />
           <Tooltip
-            formatter={(value: number) => [value, 'Quantidade']}
+            formatter={(value: number) => [value, 'Quantity']}
             labelStyle={{ color: '#374151' }}
           />
           <Bar dataKey="count" radius={[4, 4, 0, 0]}>

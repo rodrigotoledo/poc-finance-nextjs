@@ -27,7 +27,7 @@ function formatBRL(cents: number) {
   if (!Number.isFinite(cents)) {
     return tUI('common.emDash');
   }
-  return (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  return (cents / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 }
 
 function Card({ label, value, sub }: { label: string; value: string | number; sub?: string }) {

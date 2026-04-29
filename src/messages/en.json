@@ -1,0 +1,316 @@
+{
+  "entity": {
+    "originator": {
+      "label": "Originator"
+    },
+    "receivable": {
+      "label": "Receivable",
+      "status": {
+        "pending": "Pending",
+        "eligible": "Eligible",
+        "advanced": "Advanced",
+        "cancelled": "Cancelled"
+      }
+    },
+    "creditOperation": {
+      "label": "Credit Operation",
+      "status": {
+        "draft": "Draft",
+        "approved": "Approved",
+        "settled": "Settled",
+        "cancelled": "Cancelled"
+      }
+    },
+    "regulatoryGap": {
+      "label": "Regulatory Gap",
+      "status": {
+        "open": "Open",
+        "resolved": "Resolved",
+        "ignored": "Ignored",
+        "dismissed": "Dismissed"
+      },
+      "severity": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High",
+        "critical": "Critical"
+      }
+    },
+    "import": {
+      "label": "Import",
+      "status": {
+        "pending": "Pending",
+        "processing": "Processing",
+        "completed": "Completed",
+        "failed": "Failed"
+      }
+    },
+    "fund": {
+      "label": "Fund",
+      "status": {
+        "active": "Active",
+        "closed": "Closed",
+        "winding_up": "Winding Up"
+      }
+    },
+    "investmentRisk": {
+      "riskType": {
+        "credit": "Credit",
+        "market": "Market",
+        "liquidity": "Liquidity",
+        "operational": "Operational",
+        "legal": "Legal",
+        "other": "Other"
+      }
+    }
+  },
+  "ui": {
+    "importForm": {
+      "open": "+ New Import",
+      "close": "✕ Close",
+      "file": "File (CSV / XLSX)",
+      "originator": "Originator (optional)",
+      "submit": "Import",
+      "submitting": "Submitting…",
+      "cancel": "Cancel"
+    },
+    "common": {
+      "all": "All",
+      "search": "Search",
+      "searchPlaceholder": "Type to search…",
+      "status": "Status",
+      "previous": "Previous",
+      "next": "Next",
+      "loading": "Loading...",
+      "required": "Required",
+      "optional": "Optional",
+      "emDash": "—",
+      "invalidResponse": "Invalid response",
+      "save": "Save",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "quantity": "Quantity"
+    },
+    "crud": {
+      "tabs": {
+        "overview": "Overview",
+        "list": "List",
+        "create": "New"
+      }
+    },
+    "table": {
+      "pager": {
+        "total": "Total",
+        "page": "Page",
+        "of": "of"
+      }
+    },
+    "dashboard": {
+      "loadingStats": "Loading statistics…",
+      "errorLoad": "Error loading dashboard",
+      "header": {
+        "title": "Dashboard",
+        "description": "Track the latest numbers and events."
+      },
+      "cards": {
+        "originators": "Originators",
+        "receivables": "Receivables",
+        "receivablesInPortfolio": "in portfolio",
+        "creditOperations": "Credit Ops",
+        "creditOperationsFinanced": "financed",
+        "regulatoryGaps": "Regulatory Gaps",
+        "gapsOpen": "{count} open",
+        "funds": "Funds",
+        "fundsRegisteredApi": "Total registered"
+      },
+      "summary": {
+        "title": "General Summary",
+        "activeOriginators": "Active Originators",
+        "regulatoryGaps": "Regulatory Gaps",
+        "avgRate": "Average Rate"
+      },
+      "importsProgress": {
+        "title": "Imports in progress:",
+        "line": "{processing} processing · {pending} pending · {completed} completed · {failed} failed"
+      },
+      "amountsChart": {
+        "title": "Total Amounts",
+        "subtitle": "Current portfolio",
+        "categoryReceivables": "Receivables",
+        "categoryCredit": "Credit",
+        "tooltipValue": "Value"
+      },
+      "creditOpsChart": {
+        "title": "Credit Operations by Status",
+        "subtitle": "{count} operations · avg rate {avgRate}"
+      },
+      "imports": {
+        "failedTitle": "Failed Imports",
+        "failedBody": "{count} batch(es) failed.",
+        "failedCta": "View imports"
+      },
+      "receivablesByStatus": "Receivables by Status",
+      "creditOpsByStatus": "Credit Operations by Status",
+      "avgRate": "Avg Rate",
+      "feed": {
+        "title": "Real-time Feed",
+        "connected": "connected",
+        "waiting": "waiting...",
+        "empty": "Waiting for system events...",
+        "countSuffix": "event(s)",
+        "entity": {
+          "originators": "Originator",
+          "receivables": "Receivable",
+          "credit_operations": "Credit Op.",
+          "regulatory_gaps": "Regulatory Gap",
+          "funds": "Fund",
+          "investors": "Investor",
+          "investment_risks": "Investment Risk",
+          "investments": "Investment"
+        },
+        "action": {
+          "created": "created",
+          "updated": "updated",
+          "discarded": "removed",
+          "changed": "changed"
+        },
+        "summary": {
+          "status": "status",
+          "rate": "rate",
+          "dueOn": "due"
+        }
+      }
+    },
+    "exports": {
+      "entity": {
+        "originators": "Originators",
+        "receivables": "Receivables",
+        "credit_operations": "Credit Operations",
+        "regulatory_gaps": "Regulatory Gaps",
+        "imports": "Imports",
+        "events": "Events (feed)"
+      },
+      "range": {
+        "today": "today",
+        "yesterday": "yesterday",
+        "week": "last 7 days",
+        "month": "last 30 days"
+      },
+      "alert": {
+        "requested": "Export requested",
+        "ready": "Export ready (CSV sent to email)",
+        "failed": "Failed to generate export",
+        "rows": "rows"
+      },
+      "action": {
+        "label": "Export CSV",
+        "help": "Select range and generate CSV in background",
+        "button": "CSV",
+        "loading": "Generating..."
+      }
+    },
+    "funds": {
+      "page": {
+        "title": "Funds",
+        "description": "Manage your investment funds and track performance."
+      },
+      "form": {
+        "open": "+ New Fund",
+        "close": "✕ Close",
+        "title": "New Fund",
+        "submit": "Save Fund",
+        "saving": "Saving…",
+        "fields": {
+          "name": "Name",
+          "fundType": "Type (equity, debt, mixed…)",
+          "status": "Status",
+          "targetReturn": "Target Return (% p.a.)",
+          "targetReturnPlaceholder": "E.g.: 12.5",
+          "totalCommitment": "Total Commitment (USD)",
+          "allocated": "Allocated (USD)",
+          "available": "Available (USD)"
+        }
+      },
+      "table": {
+        "columns": {
+          "name": "Name",
+          "type": "Type",
+          "status": "Status",
+          "allocated": "Allocated",
+          "available": "Available",
+          "createdAt": "Created"
+        },
+        "empty": "No funds.",
+        "searchPlaceholder": "Fund name"
+      },
+      "overview": {
+        "loading": "Loading funds overview and statistics…",
+        "errorPrefix": "Could not load funds data:",
+        "sectionLedger": "Portfolio and Commitments (Ledger)",
+        "sectionInvestments": "Investments linked to fund",
+        "sectionRisks": "Risks associated with investments",
+        "risksHelp": "Risk evaluations for all investments linked to this fund.",
+        "statRegisteredFunds": "Registered Funds",
+        "statTotalCommitment": "Total Commitment",
+        "statAllocated": "Allocated Amount",
+        "statAvailableSum": "Available (Sum)",
+        "statPositionsCount": "Positions Count",
+        "statVolume": "Volume (Amount)",
+        "statRiskEvaluations": "Risk Evaluations",
+        "statAvgScore": "Avg Score",
+        "statAvgScoreSub": "Average Risk Rating",
+        "statPendingMitigation": "Pending Mitigation",
+        "statPendingMitigationSub": "Awaiting corrective action",
+        "byRiskType": "By Risk Type"
+      },
+      "statusChart": {
+        "title": "Funds by Status",
+        "fundCount": "{count} fund(s)"
+      }
+    },
+    "receivables": {
+      "page": {
+        "title": "Receivables",
+        "description": "Manage your receivables and track advancement status."
+      }
+    },
+    "creditOperations": {
+      "page": {
+        "title": "Credit Operations",
+        "description": "Track credit operations and their respective receivables."
+      }
+    },
+    "originators": {
+      "page": {
+        "title": "Originators",
+        "description": "Manage originator entities in the system."
+      }
+    },
+    "imports": {
+      "page": {
+        "title": "Imports",
+        "description": "Track the status of data imports in the system."
+      }
+    },
+    "regulatoryGaps": {
+      "page": {
+        "title": "Regulatory Gaps",
+        "description": "Manage regulatory gaps identified in the system."
+      }
+    },
+    "home": {
+      "page": {
+        "title": "Console",
+        "description": "Financial control panel for managing receivables and credit operations."
+      },
+      "sections": {
+        "dashboard": "Consolidated statistics and real-time operations feed.",
+        "originators": "Counterparties in the receivables market (Tax ID, Legal Name).",
+        "receivables": "Receivables with amount, due date, and status.",
+        "creditOperations": "Operations linked to receivables and originators.",
+        "regulatoryGaps": "Tracking of compliance gaps (BACEN, etc.).",
+        "imports": "Data batches processed in background."
+      }
+    }
+  }
+}

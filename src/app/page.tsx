@@ -11,8 +11,8 @@ const sections = [
   },
   {
     href: "/originators",
-    title: "Originadores",
-    text: "Contrapartes no mercado de recebíveis (CNPJ, razão social).",
+    title: "Originators",
+    text: "Counterparties in the receivables market (Tax ID, Legal Name).",
   },
   {
     href: "/receivables",
@@ -21,13 +21,13 @@ const sections = [
   },
   {
     href: "/credit-operations",
-    title: "Operações de crédito",
-    text: "Operações ligadas a recebíveis e originadores.",
+    title: "Credit Operations",
+    text: "Operations linked to receivables and originators.",
   },
   {
     href: "/regulatory-gaps",
-    title: "Gaps regulatórios",
-    text: "Rastreamento de lacunas de compliance (BACEN, etc.).",
+    title: "Regulatory Gaps",
+    text: "Compliance gap tracking (Central Bank, etc.).",
   },
   {
     href: "/imports",

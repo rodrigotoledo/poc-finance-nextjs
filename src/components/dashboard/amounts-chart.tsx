@@ -8,7 +8,7 @@ function formatBRL(cents: number, emDash: string) {
   if (!Number.isFinite(cents)) {
     return emDash;
   }
-  return (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  return (cents / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 }
 
 interface Props {
@@ -59,7 +59,7 @@ export function AmountsChart({ receivablesAmount, creditOpsAmount }: Props) {
             tickFormatter={(value) => {
               const cents = typeof value === 'number' ? value : Number(value);
               if (!Number.isFinite(cents)) return emDash;
-              return `R$ ${(cents / 100_000).toFixed(0)}k`;
+              return `$${(cents / 100_000).toFixed(0)}k`;
             }}
           />
           <Tooltip

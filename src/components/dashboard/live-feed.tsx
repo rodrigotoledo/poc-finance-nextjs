@@ -19,7 +19,7 @@ const ACTION_COLORS: Record<string, string> = {
 };
 
 function formatBRL(cents: number) {
-  return (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  return (cents / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 }
 
 function eventSummary(ev: RailsEvent): string {
@@ -97,7 +97,7 @@ export function LiveFeed() {
         {events.map((ev) => (
           <div key={ev._key} className="flex items-start gap-3 px-4 py-2.5">
             <span className="mt-0.5 shrink-0 text-xs tabular-nums text-zinc-400">
-              {new Date(ev.time).toLocaleTimeString('pt-BR')}
+              {new Date(ev.time).toLocaleTimeString('en-US')}
             </span>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">

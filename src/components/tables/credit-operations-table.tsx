@@ -16,7 +16,7 @@ import { tUI } from '@/lib/i18n/ui';
 import { ExportCsvControl } from '@/components/ui/export-csv';
 
 function formatBRL(cents: number) {
-  return (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  return (cents / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 }
 
 const col = createColumnHelper<CreditOperation>();
