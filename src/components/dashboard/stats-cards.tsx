@@ -10,9 +10,7 @@ import { tUI } from '@/lib/i18n/ui';
 import { normalizeDashboardStats } from '@/lib/dashboard/normalize-dashboard-stats';
 import type { DashboardStats } from '@/lib/types/rails-entities';
 import { statusBadgeClass } from '@/lib/ui/status-badges';
-import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import { useMemo } from 'react';
 
 const ENTITIES = [
   'originators',
@@ -52,43 +50,29 @@ function StatusBadges({ by_status }: { by_status: Record<string, number> }) {
   );
 }
 
-export function StatsCards({ initialData }: { initialData: DashboardStats }) {
-  useServerEvents(ENTITIES);
-
-  const normalizedInitialData = useMemo(
-    () => normalizeDashboardStats(initialData as unknown),
-    [initialData],
-  );
-
-  const { data: s = normalizedInitialData } = useQuery({
-    queryKey: ['dashboard'],
-    queryFn: async () => normalizeDashboardStats(await fetchJson<unknown>(`/api/v2/dashboard`)),
-    initialData: normalizedInitialData,
-    refetchInterval: 1_500,
-  });
-
+export function StatsCards({ stats }: { stats: DashboardStats }) {
   return (
     <div className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        <Card label={tUI('dashboard.cards.originators')} value={s.originators.total} />
+        <Card label={tUI('dashboard.cards.originators')} value={stats.originators.total} />
         <Card
           label={tUI('dashboard.cards.receivables')}
-          value={s.receivables.total}
-          sub={`${formatBRL(s.receivables.total_amount_cents)} ${tUI('dashboard.cards.receivablesInPortfolio')}`}
+          value={stats.receivables.total}
+          sub={`${formatBRL(stats.receivables.total_amount_cents)} ${tUI('dashboard.cards.receivablesInPortfolio')}`}
         />
         <Card
           label={tUI('dashboard.cards.creditOperations')}
-          value={s.credit_operations.total}
-          sub={`${formatBRL(s.credit_operations.total_funded_cents)} ${tUI('dashboard.cards.creditOperationsFinanced')}`}
+          value={stats.credit_operations.total}
+          sub={`${formatBRL(stats.credit_operations.total_funded_cents)} ${tUI('dashboard.cards.creditOperationsFinanced')}`}
         />
         <Card
           label={tUI('dashboard.cards.regulatoryGaps')}
-          value={s.regulatory_gaps.total}
-          sub={tUI('dashboard.cards.gapsOpen').replace('{count}', String(s.regulatory_gaps.open))}
+          value={stats.regulatory_gaps.total}
+          sub={tUI('dashboard.cards.gapsOpen').replace('{count}', String(stats.regulatory_gaps.open))}
         />
         <Card
           label={tUI('dashboard.cards.funds')}
-          value={s.funds.total}
+          value={stats.funds.total}
           sub={tUI('dashboard.cards.fundsRegisteredApi')}
         />
       </div>
@@ -96,16 +80,16 @@ export function StatsCards({ initialData }: { initialData: DashboardStats }) {
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
           <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">{tUI('dashboard.receivablesByStatus')}</p>
-          <StatusBadges by_status={s.receivables.by_status} />
+          <StatusBadges by_status={stats.receivables.by_status} />
         </div>
-        <CreditOpsChart by_status={s.credit_operations.by_status} avg_rate={s.credit_operations.avg_rate} />
+        <CreditOpsChart by_status={stats.credit_operations.by_status} avg_rate={stats.credit_operations.avg_rate} />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <ReceivablesChart by_status={s.receivables.by_status} />
+        <ReceivablesChart by_status={stats.receivables.by_status} />
         <AmountsChart
-          receivablesAmount={s.receivables.total_amount_cents}
-          creditOpsAmount={s.credit_operations.total_funded_cents}
+          receivablesAmount={stats.receivables.total_amount_cents}
+          creditOpsAmount={stats.credit_operations.total_funded_cents}
         />
         <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
           <p className="text-xs font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
@@ -114,17 +98,17 @@ export function StatsCards({ initialData }: { initialData: DashboardStats }) {
           <div className="mt-2 space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-zinc-600 dark:text-zinc-400">{tUI('dashboard.summary.activeOriginators')}</span>
-              <span className="font-medium">{s.originators.total}</span>
+              <span className="font-medium">{stats.originators.total}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-zinc-600 dark:text-zinc-400">{tUI('dashboard.summary.regulatoryGaps')}</span>
-              <span className="font-medium">{s.regulatory_gaps.total}</span>
+              <span className="font-medium">{stats.regulatory_gaps.total}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-zinc-600 dark:text-zinc-400">{tUI('dashboard.summary.avgRate')}</span>
               <span className="font-medium">
-                {s.credit_operations.avg_rate != null
-                  ? `${s.credit_operations.avg_rate.toFixed(4)}%`
+                {stats.credit_operations.avg_rate != null
+                  ? `${stats.credit_operations.avg_rate.toFixed(4)}%`
                   : tUI('common.emDash')}
               </span>
             </div>
@@ -132,28 +116,28 @@ export function StatsCards({ initialData }: { initialData: DashboardStats }) {
         </div>
       </div>
 
-      {(s.imports.pending > 0 || s.imports.processing > 0) && (
+      {(stats.imports.pending > 0 || stats.imports.processing > 0) && (
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm dark:border-amber-800 dark:bg-amber-900/20">
           <span className="font-medium text-amber-800 dark:text-amber-300">
             {tUI('dashboard.importsProgress.title')}{' '}
           </span>
           <span className="text-amber-700 dark:text-amber-400">
             {tUI('dashboard.importsProgress.line')
-              .replace('{processing}', String(s.imports.processing))
-              .replace('{pending}', String(s.imports.pending))
-              .replace('{completed}', String(s.imports.completed))
-              .replace('{failed}', String(s.imports.failed))}
+              .replace('{processing}', String(stats.imports.processing))
+              .replace('{pending}', String(stats.imports.pending))
+              .replace('{completed}', String(stats.imports.completed))
+              .replace('{failed}', String(stats.imports.failed))}
           </span>
         </div>
       )}
 
-      {s.imports.failed > 0 && (
+      {stats.imports.failed > 0 && (
         <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm dark:border-red-800 dark:bg-red-900/20">
           <span className="font-medium text-red-800 dark:text-red-300">
             {tUI('dashboard.imports.failedTitle')}:{' '}
           </span>
           <span className="text-red-700 dark:text-red-400">
-            {tUI('dashboard.imports.failedBody').replace('{count}', String(s.imports.failed))}
+            {tUI('dashboard.imports.failedBody').replace('{count}', String(stats.imports.failed))}
             {' '}
             <Link href="/imports" className="font-medium underline underline-offset-2 hover:opacity-90">
               {tUI('dashboard.imports.failedCta')}

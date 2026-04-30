@@ -1,21 +1,20 @@
 'use client';
 
 import { ExportCsvControl } from '@/components/ui/export-csv';
-import { getApiBaseUrl } from '@/lib/api/config';
+import { fetchJson } from '@/lib/api/fetch-json';
 import { t } from '@/lib/i18n/status';
 import { tUI } from '@/lib/i18n/ui';
 import type { RailsEvent } from '@/lib/types/rails-entities';
 import { getStatusTailwindClass } from '@/lib/ui/status-colors';
-import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useRef, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 const FEED_LIMIT = 50;
 
 const ACTION_COLORS: Record<string, string> = {
-  created:   getStatusTailwindClass('approved'),  // Same green as approved status
+  created:   getStatusTailwindClass('approved'),
   updated:   'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
-  discarded: getStatusTailwindClass('cancelled'), // Same red as cancelled status
-  changed:   getStatusTailwindClass('draft'),     // Same gray as draft status
+  discarded: getStatusTailwindClass('cancelled'),
+  changed:   getStatusTailwindClass('draft'),
 };
 
 function formatBRL(cents: number) {
@@ -36,43 +35,14 @@ function eventSummary(ev: RailsEvent): string {
   return parts.join(' · ');
 }
 
-type FeedItem = RailsEvent & { _key: number; stream_id?: string };
-
 export function LiveFeed() {
-  const [events, setEvents] = useState<FeedItem[]>([]);
-  const [connected, setConnected] = useState(false);
-  const keyRef = useRef(0);
-  const queryClient = useQueryClient();
+  const { data: events = [], isLoading, isRefetching } = useQuery({
+    queryKey: ['dashboard-events'],
+    queryFn: async () => fetchJson<RailsEvent[]>('/api/v2/events'),
+    refetchInterval: 1_500,
+  });
 
-  useEffect(() => {
-    const url = `${getApiBaseUrl()}/api/v2/events`;
-    const source = new EventSource(url);
-
-    source.onopen = () => setConnected(true);
-    source.onerror = () => setConnected(false);
-
-    source.onmessage = (msg) => {
-      let ev: RailsEvent;
-      try {
-        ev = JSON.parse(msg.data) as RailsEvent;
-      } catch {
-        return;
-      }
-
-      // Importações e exports têm UI própria (/imports, exports) — o feed do dashboard foca no fluxo de operações.
-      if (ev.entity === 'imports' || ev.entity === 'exports') return;
-
-      setEvents((prev) => [{ ...ev, _key: ++keyRef.current }, ...prev].slice(0, FEED_LIMIT));
-
-      // Invalidate dashboard stats to refetch
-      void queryClient.invalidateQueries({ queryKey: ['dashboard'] });
-      void queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
-    };
-
-    return () => {
-      source.close();
-    };
-  }, [queryClient]);
+  const active = !isLoading && !isRefetching;
 
   return (
     <div className="rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
@@ -81,21 +51,21 @@ export function LiveFeed() {
           <h2 className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">{tUI('dashboard.feed.title')}</h2>
           <ExportCsvControl entity="events" />
         </div>
-        <span className={`flex items-center gap-1.5 text-xs ${connected ? 'text-emerald-600 dark:text-emerald-400' : 'text-zinc-400'}`}>
-          <span className={`inline-block h-2 w-2 rounded-full ${connected ? 'bg-emerald-500 animate-pulse' : 'bg-zinc-400'}`} />
-          {connected ? tUI('dashboard.feed.connected') : tUI('dashboard.feed.waiting')}
+        <span className={`flex items-center gap-1.5 text-xs ${!isLoading ? 'text-emerald-600 dark:text-emerald-400' : 'text-zinc-400'}`}>
+          <span className={`inline-block h-2 w-2 rounded-full ${!isLoading ? 'bg-emerald-500 animate-pulse' : 'bg-zinc-400'}`} />
+          {!isLoading ? tUI('dashboard.feed.connected') : tUI('dashboard.feed.waiting')}
         </span>
       </div>
 
       <div className="relative">
         <div className="max-h-[420px] overflow-y-auto divide-y divide-zinc-50 dark:divide-zinc-900">
-        {events.length === 0 && (
+        {events.length === 0 && !isLoading && (
           <p className="px-4 py-6 text-center text-sm text-zinc-400">
             {tUI('dashboard.feed.empty')}
           </p>
         )}
-        {events.map((ev) => (
-          <div key={ev._key} className="flex items-start gap-3 px-4 py-2.5">
+        {events.map((ev, idx) => (
+          <div key={`${ev.id}-${idx}`} className="flex items-start gap-3 px-4 py-2.5">
             <span className="mt-0.5 shrink-0 text-xs tabular-nums text-zinc-400">
               {new Date(ev.time).toLocaleTimeString('en-US')}
             </span>
@@ -118,7 +88,6 @@ export function LiveFeed() {
           </div>
         ))}
       </div>
-        {/* Fade visual no final da lista (não remove items, só efeito visual). */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-linear-to-t from-white to-transparent dark:from-zinc-950" />
       </div>
 

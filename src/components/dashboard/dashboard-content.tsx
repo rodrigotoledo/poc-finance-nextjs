@@ -16,5 +16,5 @@ export function DashboardContent() {
     return <DataError message={error?.message ?? tUI('dashboard.errorLoad')} />;
   }
 
-  return <StatsCards initialData={stats} />;
+  return <StatsCards stats={stats} />;
 }
